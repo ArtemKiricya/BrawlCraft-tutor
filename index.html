@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Бравл Старс в Minecraft</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&family=Fredoka+One&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(45deg, #2a2a72, #4a1d96, #6b48ff, #2a2a72);
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
+            color: #e0e0ff;
+            line-height: 1.7;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Слой для звёзд */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 30%, rgba(255, 255, 255, 0.2) 1px, transparent 1px),
+                radial-gradient(circle at 50% 70%, rgba(255, 255, 255, 0.15) 1.5px, transparent 1.5px),
+                radial-gradient(circle at 80% 20%, rgba(255, 255, 255, 0.1) 1px, transparent 1px),
+                radial-gradient(circle at 30% 80%, rgba(255, 255, 255, 0.1) 1.2px, transparent 1.2px);
+            background-size: 200px 200px;
+            opacity: 0.5;
+            animation: twinkleStars 5s ease-in-out infinite;
+            z-index: -1;
+        }
+
+        /* Слой для свечения */
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 50% 50%, rgba(255, 111, 145, 0.1), transparent 70%);
+            opacity: 0.3;
+            z-index: -2;
+        }
+
+        header {
+            padding: 120px 20px;
+            text-align: center;
+            background: linear-gradient(to bottom, rgba(42, 29, 150, 0.85), rgba(30, 30, 47, 0.4));
+            position: relative;
+            backdrop-filter: blur(10px);
+            border-bottom: 4px solid rgba(255, 111, 145, 0.5);
+        }
+
+        header h1 {
+            font-family: 'Fredoka One', cursive;
+            font-size: 64px;
+            color: #ffd700;
+            text-shadow: 0 0 12px rgba(255, 215, 0, 0.6), 0 0 24px rgba(255, 111, 145, 0.4);
+            animation: fadeIn 1.5s ease-out;
+        }
+
+        header p {
+            font-size: 22px;
+            color: #e0e0ff;
+            max-width: 700px;
+            margin: 25px auto 0;
+            background: rgba(255, 255, 255, 0.15);
+            padding: 15px 30px;
+            border-radius: 25px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            animation: fadeIn 2s ease-out;
+        }
+
+        nav {
+            background: rgba(42, 29, 150, 0.95);
+            padding: 20px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(15px);
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.3);
+        }
+
+        nav a {
+            color: #e0e0ff;
+            text-decoration: none;
+            margin: 0 30px;
+            font-size: 18px;
+            font-weight: 500;
+            text-transform: uppercase;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        nav a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            background: #ff6f91;
+            bottom: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            transition: width 0.3s ease;
+        }
+
+        nav a:hover::after {
+            width: 100%;
+        }
+
+        nav a:hover {
+            color: #ffd700;
+            text-shadow: 0 0 10px #ff6f91;
+        }
+
+        section {
+            padding: 100px 20px;
+            max-width: 1100px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        h2 {
+            font-family: 'Fredoka One', cursive;
+            font-size: 48px;
+            color: #ffd700;
+            text-align: center;
+            margin-bottom: 50px;
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+            animation: slideIn 1s ease-out;
+        }
+
+        .content-box {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 50px;
+            border-radius: 30px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 111, 145, 0.3);
+            transition: all 0.4s ease;
+            color: #2a2a72;
+        }
+
+        .content-box:hover {
+            transform: translateY(-15px);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+            border-color: rgba(255, 215, 0, 0.5);
+        }
+
+        .content-box p {
+            font-size: 18px;
+            color: #333;
+            margin: 20px 0;
+        }
+
+        .content-box h3 {
+            font-size: 26px;
+            color: #ff6f91;
+            margin: 35px 0 25px;
+            font-weight: 700;
+        }
+
+        .content-box ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .content-box ul li {
+            font-size: 18px;
+            color: #444;
+            margin: 20px 0;
+            padding-left: 40px;
+            position: relative;
+            transition: color 0.3s ease;
+        }
+
+        .content-box ul li:hover {
+            color: #2a2a72;
+        }
+
+        .content-box ul li::before {
+            content: '✨';
+            color: #ff6f91;
+            position: absolute;
+            left: 0;
+            font-size: 22px;
+            animation: twinkle 1.5s infinite ease-in-out;
+        }
+
+        .content-box a {
+            color: #ff6f91;
+            font-weight: 500;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .content-box a:hover {
+            color: #ffd700;
+        }
+
+        .donate-button {
+            display: inline-block;
+            margin-top: 30px;
+            padding: 15px 40px;
+            background: transparent;
+            color: #ffd700;
+            font-weight: 600;
+            text-transform: uppercase;
+            border: 3px solid #ff6f91;
+            border-radius: 10px;
+            text-decoration: none;
+            box-shadow: 0 0 15px rgba(255, 111, 145, 0.5);
+            transition: all 0.4s ease;
+            position: relative;
+            font-size: 18px;
+            text-align: center;
+            z-index: 1;
+            overflow: hidden;
+        }
+
+        .donate-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, rgba(255, 111, 145, 0.2), rgba(255, 215, 0, 0.2));
+            opacity: 0;
+            transition: opacity 0.4s ease;
+            z-index: -1;
+        }
+
+        .donate-button:hover::before {
+            opacity: 1;
+        }
+
+        .donate-button:hover {
+            color: #fff;
+            border-color: #ffd700;
+            box-shadow: 0 0 25px rgba(255, 215, 0, 0.8);
+            transform: translateY(-5px);
+        }
+
+        #contact .content-box img {
+            width: 35px;
+            vertical-align: middle;
+            margin-left: 15px;
+            transition: transform 0.4s ease;
+        }
+
+        #contact .content-box img:hover {
+            transform: rotate(360deg) scale(1.3);
+        }
+
+        footer {
+            background: linear-gradient(to top, rgba(42, 29, 150, 0.9), rgba(30, 30, 47, 0.7));
+            color: #e0e0ff;
+            padding: 50px 0;
+            text-align: center;
+            font-size: 16px;
+            box-shadow: 0 -5px 25px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes twinkle {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        @keyframes twinkleStars {
+            0% { opacity: 0.5; }
+            50% { opacity: 0.8; }
+            100% { opacity: 0.5; }
+        }
+
+        @media (max-width: 768px) {
+            header h1 { font-size: 48px; }
+            header p { font-size: 18px; }
+            nav a { margin: 0 20px; font-size: 16px; }
+            h2 { font-size: 36px; }
+            .content-box { padding: 40px; }
+            .content-box ul li { font-size: 16px; }
+            .donate-button { padding: 15px 40px; font-size: 16px; }
+        }
+
+        @media (max-width: 480px) {
+            header { padding: 80px 10px; }
+            header h1 { font-size: 36px; }
+            header p { font-size: 16px; }
+            nav { padding: 15px 0; }
+            nav a { margin: 0 15px; font-size: 14px; }
+            h2 { font-size: 28px; }
+            .content-box { padding: 30px; }
+            .donate-button { padding: 12px 30px; font-size: 14px; }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Бравл Старс в Minecraft</h1>
+    <p>Крутой сервер для фанатов Brawl Stars!</p>
+</header>
+
+<nav>
+    <a href="#intro">Главная</a>
+    <a href="#how-to-play">Как играть</a>
+    <a href="#features">Что у нас есть</a>
+    <a href="#shop">Магазин</a>
+    <a href="#faq">Вопросы</a>
+    <a href="#contact">Контакты</a>
+</nav>
+
+<section id="intro">
+    <h2>Привет, Бравлер!</h2>
+    <div class="content-box">
+        <p>Ты любишь Brawl Stars? А Minecraft? Тогда тебе к нам! Мы сделали крутой сервер, где ты можешь сражаться, как в Brawl Stars, но в мире Minecraft!</p>
+        <p>Зови друзей и стань лучшим Бравлером!</p>
+    </div>
+</section>
+
+<section id="how-to-play">
+    <h2>Как начать?</h2>
+    <div class="content-box">
+        <h3>Шаг 1: Зайди на сервер</h3>
+        <ul>
+            <li>Открой Minecraft.</li>
+            <li>Выбери "Мультиплеер".</li>
+            <li>Добавь сервер: <strong>BrawlCraft.gomc.fun</strong>.</li>
+            <li>Нажми "Готово" и заходи!</li>
+        </ul>
+        <h3>Шаг 2: Что делать?</h3>
+        <ul>
+            <li>Не знаешь, с чего начать?</li>
+            <li>Пиши /warp mine — это шахта, там есть стартовый набор!</li>
+            <li>Пиши /warp bank — покупай и продавай ресурсы!</li>
+            <li>Пиши /warp bull — купи крутую кирку!</li>
+            <li>Пиши /warp elprimo — бери оружие!</li>
+            <li>Пиши /warp voron — найди броню!</li>
+            <li>Пиши /warp portal — путешествуй по городам!</li>
+        </ul>
+    </div>
+</section>
+
+<section id="features">
+    <h2>Что у нас крутого?</h2>
+    <div class="content-box">
+        <ul>
+            <li>Карты в стиле Brawl Stars!</li>
+            <li>Режимы: "Бравл Арена", "Нокаут", "ШоуДаун".</li>
+            <li>Куча классных плагинов!</li>
+            <li>Новые карты и обновления!</li>
+        </ul>
+    </div>
+</section>
+
+<section id="shop">
+    <h2>Магазин для Бравлеров!</h2>
+    <div class="content-box">
+        <p>Хочешь крутые штуки? У нас есть донат! Покупай и получай:</p>
+        <ul>
+            <li>Донаты, кейсы, подарки при покупке!</li>
+            <li>Бонусы для быстрого старта!</li>
+        </ul>
+        <p>Авто-доната нету, обращаться к Администрации! Вот его Telegram: <a href="https://t.me/Artem20088888">@Artem20088888</a></p>
+        <a href="https://brawlcraft2026.trademc.org/" class="donate-button">Купить донат!</a>
+    </div>
+</section>
+
+<section id="faq">
+    <h2>Часто спрашивают</h2>
+    <div class="content-box">
+        <h3>На какой версии играть?</h3>
+        <p>Наш сервер работает на Minecraft 1.16.5 и выше. Лучше зайти с Optifine!</p>
+        <h3>Можно играть с друзьями?</h3>
+        <p>Конечно! Зови друзей и давай наш адрес: <strong>BrawlCraft.gomc.fun</strong>.</p>
+        <h3>Есть донат?</h3>
+        <p>Да, у нас есть донат! Можно купить крутые штуки, но играть можно и бесплатно.</p>
+    </div>
+</section>
+
+<section id="contact">
+    <h2>Наши соцсети тут!</h2>
+    <div class="content-box">
+        <ul>
+            <li>YouTube: <a href="https://www.youtube.com/@BrawlCraftOfficial"><img src="youtube.png" alt="YouTube"></a></li>
+            <li>TikTok: <a href="https://www.tiktok.com/@mrlifetiktok?_t=ZM-8uvufRezJlH&_r=1"><img src="Tiktok.png" alt="TikTok"></a></li>
+            <li>Telegram: <a href="https://t.me/+MMSk-xyXJOEzNjYy"><img src="telegram.jpg" alt="Telegram"></a></li>
+        </ul>
+    </div>
+</section>
+
+<footer>
+    <p>© 2025 Бравл Крафт. Все права защищены!</p>
+</footer>
+
+</body>
+</html>
